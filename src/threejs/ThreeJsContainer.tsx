@@ -3,7 +3,7 @@ import {useRef, useState} from "react";
 import {Canvas, ThreeEvent, useFrame, useLoader} from "@react-three/fiber";
 import * as THREE from 'three';
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
-import {OrbitControls, useGLTF} from "@react-three/drei";
+import {Environment, MapControls, OrbitControls, OrthographicCamera, useGLTF} from "@react-three/drei";
 
 // @ts-ignore
 const cartesianProduct = (...a) => a.reduce((a, b) => a.flatMap(d => b.map(e => [d, e].flat())));
@@ -18,14 +18,19 @@ export default function ThreeJsContainer() {
   return (
       <div className={'master-container'}>
         <Canvas shadows={true}>
+          {/*<color attach="background" args={['#000000']} />*/}
+          {/*<hemisphereLight intensity={0.2} color="#eaeaea" groundColor="blue" />*/}
+          {/*<Environment preset="city"/>*/}
+          {/*<hemisphereLight intensity={0.1} />*/}
           <ambientLight intensity={0.1}/>
-          <color attach="background" args={['#000000']} />
-          {/*<pointLight position={[10, 10, 10]}/>*/}
+          <pointLight position={[0, 1000, 0]} intensity={0.3}/>
+          <directionalLight castShadow={true} intensity={0.8} shadow-mapSize={[1024, 1024]} shadow-bias={-0.0001} position={[-10, 10, 5]} />
 
-          <directionalLight position={[-10, 10, 5]}  castShadow={true}>
-          </directionalLight>
 
-          <OrbitControls/>
+          {/*<directionalLight position={[-10, 10, 5]}  castShadow={true}/>*/}
+
+          <OrthographicCamera makeDefault far={100} near={0.1} position={[-10, 10, -10]} zoom={200} />
+          <MapControls/>
 
           {/*{boxes}*/}
           <TileColumn/>
@@ -92,8 +97,8 @@ function TileColumn(props: JSX.IntrinsicElements['group']) {
             receiveShadow={true}
             geometry={tiles01.nodes.Cube.geometry}
             material={tiles01.materials["Material.010"]}
-            position={[0, 0.5, 0]}
-        >
+            position={[0, 0.5, 0]}>
+          {/*<meshStandardMaterial color={'hotpink'}/>*/}
         </mesh>
       </group>
   );
