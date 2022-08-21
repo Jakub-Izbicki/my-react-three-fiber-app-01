@@ -21,9 +21,7 @@ export default function PostProcessingEffects() {
     const pixelationFactor = 50;
 
     const size = Math.floor(zoom / pixelationFactor);
-    const a =  size >= 1 ? size : 1;
-    console.log(a);
-    return a;
+    return size >= 1 ? size : 1;
   }, [zoom]);
 
   return (
