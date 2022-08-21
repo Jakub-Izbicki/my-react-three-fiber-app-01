@@ -10,7 +10,7 @@ export default function PostProcessingEffects() {
 
   return (
       <Effects multisamping={8} renderIndex={1} disableGamma={false} disableRenderPass={false} disableRender={false}>
-        <shaderPass args={[PixelShader]} uniforms-pixelSize-value={6} uniforms-resolution-value={[size.width, size.height]}/>
+        <shaderPass args={[PixelShader]} uniforms-pixelSize-value={4} uniforms-resolution-value={[size.width, size.height]}/>
       </Effects>
   );
 }

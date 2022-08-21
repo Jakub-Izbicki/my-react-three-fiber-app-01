@@ -3,7 +3,7 @@ import {useRef, useState} from "react";
 import {Canvas, ThreeEvent, useFrame, useLoader} from "@react-three/fiber";
 import * as THREE from 'three';
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
-import {Environment, MapControls, OrbitControls, OrthographicCamera, useGLTF} from "@react-three/drei";
+import {Edges, Environment, MapControls, OrbitControls, OrthographicCamera, useGLTF} from "@react-three/drei";
 import PostProcessingEffects from "./PostProcessingEffects";
 
 // @ts-ignore
@@ -87,15 +87,16 @@ function Ground(props: JSX.IntrinsicElements['mesh']) {
 }
 
 function TileColumn(props: JSX.IntrinsicElements['group']) {
-  const tiles01 = useGLTF('models/tiles01.glb');
+  // @ts-ignore
+  const {nodes, materials} = useGLTF('models/tiles01.glb');
 
   return (
       <group {...props} dispose={null}>
         <mesh
             castShadow={true}
             receiveShadow={true}
-            geometry={tiles01.nodes.Cube.geometry}
-            material={tiles01.materials["Material.010"]}
+            geometry={nodes.Cube.geometry}
+            material={materials["Material.010"]}
             position={[0, 0.5, 0]}>
           {/*<meshStandardMaterial color={'hotpink'}/>*/}
         </mesh>
