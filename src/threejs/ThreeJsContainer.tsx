@@ -4,6 +4,7 @@ import {Canvas, ThreeEvent, useFrame, useLoader} from "@react-three/fiber";
 import * as THREE from 'three';
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {Environment, MapControls, OrbitControls, OrthographicCamera, useGLTF} from "@react-three/drei";
+import PostProcessingEffects from "./PostProcessingEffects";
 
 // @ts-ignore
 const cartesianProduct = (...a) => a.reduce((a, b) => a.flatMap(d => b.map(e => [d, e].flat())));
@@ -25,12 +26,10 @@ export default function ThreeJsContainer() {
           <ambientLight intensity={0.1}/>
           <pointLight position={[0, 1000, 0]} intensity={0.3}/>
           <directionalLight castShadow={true} intensity={0.8} shadow-mapSize={[1024, 1024]} shadow-bias={-0.0001} position={[-10, 10, 5]} />
-
-
           {/*<directionalLight position={[-10, 10, 5]}  castShadow={true}/>*/}
-
           <OrthographicCamera makeDefault far={100} near={0.1} position={[-10, 10, -10]} zoom={200} />
-          <MapControls/>
+          <MapControls screenSpacePanning={true} enableDamping={false}/>
+          <PostProcessingEffects/>
 
           {/*{boxes}*/}
           <TileColumn/>
