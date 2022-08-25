@@ -2,12 +2,14 @@ import {PixelShader, ShaderPass, SSAOPass} from "three-stdlib"
 import {extend, useFrame, useThree} from "@react-three/fiber";
 import {Effects} from "@react-three/drei";
 import {useMemo, useState} from "react";
+import {RenderPixelatedPass} from "./RenderPixelatedPass";
+import {Vector2} from "three";
 
-extend({SSAOPass, ShaderPass});
+extend({SSAOPass, ShaderPass, RenderPixelatedPass});
 
 // creates a pixelated screen effect
 export default function PostProcessingEffects() {
-  const {size, camera} = useThree();
+  const {size, camera, scene} = useThree();
   const [zoom, setZoom] = useState(camera.zoom);
 
   useFrame(() => {
@@ -18,7 +20,7 @@ export default function PostProcessingEffects() {
 
   const pixelSize = useMemo(() => {
     // arbitrary value, defining how pixelated things are
-    const pixelationFactor = 50;
+    const pixelationFactor = 40;
 
     const size = Math.floor(zoom / pixelationFactor);
     return size >= 1 ? size : 1;
@@ -26,7 +28,8 @@ export default function PostProcessingEffects() {
 
   return (
       <Effects multisamping={8} renderIndex={1} disableGamma={false} disableRenderPass={false} disableRender={false}>
-        <shaderPass args={[PixelShader]} uniforms-pixelSize-value={pixelSize} uniforms-resolution-value={[size.width, size.height]}/>
+        {/*<shaderPass args={[PixelShader]} uniforms-pixelSize-value={pixelSize} uniforms-resolution-value={[size.width, size.height]}/>*/}
+        <renderPixelatedPass args={[new Vector2(size.width, size.height), pixelSize, scene, camera]}/>
       </Effects>
   );
 }
