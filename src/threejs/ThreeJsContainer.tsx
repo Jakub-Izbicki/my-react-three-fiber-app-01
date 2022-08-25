@@ -5,7 +5,8 @@ import * as THREE from 'three';
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {Edges, Environment, MapControls, OrbitControls, OrthographicCamera, useGLTF} from "@react-three/drei";
 import PostProcessingEffects from "./PostProcessingEffects";
-import {Vector3} from "three";
+import {Euler, Vector3} from "three";
+import WorldObject from "./WorldObject";
 
 // @ts-ignore
 const cartesianProduct = (...a) => a.reduce((a, b) => a.flatMap(d => b.map(e => [d, e].flat())));
@@ -16,11 +17,11 @@ export default function ThreeJsContainer() {
   // const boxes = cartesianProduct([...Array(sideSize).keys()], [...Array(sideSize).keys()])
   //   .map((values: [number, number]) => new THREE.Vector3(values[0], values[1], 0))
   //   .map((v: THREE.Vector3) => (<Box position={v} key={`${v.x}:${v.y}:${v.z}`}/>));
-
-  const dirtTiles = cartesianProduct([...Array(sideSize).keys()], [...Array(sideSize).keys()])
-  .map((values: [number, number]) => [values[0] - sideSize / 2, values[1] - sideSize / 2 ])
-  .map((values: [number, number]) => new THREE.Vector3(values[0], 0, values[1]))
-  .map((v: THREE.Vector3) => (<TileDirt position={v} key={`${v.x}:${v.y}:${v.z}`}/>));
+  //
+  // const dirtTiles = cartesianProduct([...Array(sideSize).keys()], [...Array(sideSize).keys()])
+  // .map((values: [number, number]) => [values[0] - sideSize / 2, values[1] - sideSize / 2 ])
+  // .map((values: [number, number]) => new THREE.Vector3(values[0], 0, values[1]))
+  // .map((v: THREE.Vector3) => (<TileDirt position={v} key={`${v.x}:${v.y}:${v.z}`}/>));
 
   return (
       <div className={'master-container'}>
@@ -33,51 +34,18 @@ export default function ThreeJsContainer() {
           <pointLight position={[0, 1000, 0]} intensity={0.3}/>
           <directionalLight castShadow={true} intensity={0.8} shadow-mapSize={[1024, 1024]} shadow-bias={-0.0001} position={[-10, 10, 5]} />
           {/*<directionalLight position={[-10, 10, 5]}  castShadow={true}/>*/}
-          <OrthographicCamera autoRotate makeDefault far={100} near={0.1} position={[-10, 10, -10]} zoom={200} />
-          <MapControls autoRotate={true} autoRotateSpeed={-0.1} screenSpacePanning={true} enableDamping={false}/>
+          <OrthographicCamera makeDefault far={100} near={0.1} position={[-10, 10, -10]} zoom={200} />
+          <MapControls screenSpacePanning={true} enableDamping={false}/>
           <PostProcessingEffects/>
 
           {/*{boxes}*/}
-          <TileColumn/>
-          <Tile geometryName={'column02'} materialName={'grayStone01'} position={new Vector3(-2, 0, 1)}/>
-          {dirtTiles}
-          {/*<Ground/>*/}
+          {/*<TileColumn/>*/}
+          <WorldObject geometryName={'column01'} materialName={'grayStone01'} worldPosition={new Vector3(0, 0, 0)} autoRotate={false}/>
+          <WorldObject geometryName={'sphere'} materialName={'sphere01'} worldPosition={new Vector3(-1.2, 1, 0.5)} autoRotate={true}/>
+          {/*{dirtTiles}*/}
+          <Ground/>
         </Canvas>
       </div>
-  );
-}
-
-export function Box(props: JSX.IntrinsicElements['mesh']) {
-  const ref = useRef<THREE.Mesh>(null!);
-
-  const [hovered, setHovered] = useState(false);
-  const [clicked, setClicked] = useState(false);
-
-  const onPointerOverOut = (event: ThreeEvent<PointerEvent>, isOver: boolean) => {
-    event.stopPropagation();
-    setHovered(isOver);
-  }
-
-  const onClick = (event: ThreeEvent<MouseEvent>, clicked: boolean) => {
-    event.stopPropagation();
-    setClicked(clicked)
-  }
-
-  // useFrame((state, delta) => (ref.current.rotation.x += 0.01));
-
-  return (
-      <mesh
-          {...props}
-          castShadow={true}
-          receiveShadow={true}
-          ref={ref}
-          scale={clicked ? 1.5 : 1}
-          onClick={(event) => onClick(event, !clicked)}
-          onPointerOver={(event) => onPointerOverOut(event, true)}
-          onPointerOut={(event) => onPointerOverOut(event, false)}>
-        <boxGeometry args={[1, 1, 1]}/>
-        <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'}/>
-      </mesh>
   );
 }
 
@@ -88,60 +56,8 @@ function Ground(props: JSX.IntrinsicElements['mesh']) {
           castShadow={true}
           receiveShadow={true}
           position={[0, -0.05, 0]}>
-        <boxGeometry args={[15, 0.1, 15]}/>
-        <meshStandardMaterial color={'grey'}/>
+        <boxGeometry args={[25, 0.1, 25]}/>
+        <meshStandardMaterial color={'gray'}/>
       </mesh>
-  );
-}
-
-function TileColumn(props: JSX.IntrinsicElements['group']) {
-  // @ts-ignore
-  const {nodes, materials} = useGLTF('models/tiles01.glb');
-
-  return (
-      <group {...props} dispose={null}>
-        <mesh
-            castShadow={true}
-            receiveShadow={true}
-            geometry={nodes['column01'].geometry}
-            material={materials["grayStone01"]}
-            position={[0, 0.5, 0]}>
-          {/*<meshStandardMaterial color={'hotpink'}/>*/}
-        </mesh>
-      </group>
-  );
-}
-
-function TileDirt(props: JSX.IntrinsicElements['group'] & {position: Vector3}) {
-  // @ts-ignore
-  const {nodes, materials} = useGLTF('models/tiles01.glb');
-
-  return (
-      <group {...props} dispose={null}>
-        <mesh
-            castShadow={true}
-            receiveShadow={true}
-            geometry={nodes['groundDirt01'].geometry}
-            material={materials["dirt01"]}
-            position={[0, 0, 0]}>
-        </mesh>
-      </group>
-  );
-}
-
-function Tile(props: JSX.IntrinsicElements['group'] & {geometryName: string, materialName: string}) {
-  // @ts-ignore
-  const {nodes, materials} = useGLTF('models/tiles01.glb');
-
-  return (
-      <group {...props} dispose={null}>
-        <mesh
-            castShadow={true}
-            receiveShadow={true}
-            geometry={nodes[props.geometryName].geometry}
-            material={materials[props.materialName]}
-            position={[0, 0.5, 0]}>
-        </mesh>
-      </group>
   );
 }
