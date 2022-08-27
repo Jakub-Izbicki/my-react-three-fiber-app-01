@@ -1,13 +1,19 @@
-import {useGLTF} from "@react-three/drei";
-import {useFrame, Vector3} from "@react-three/fiber";
-import {useState} from "react";
-import {Euler} from "three";
+import {TransformControls, useGLTF, useHelper} from "@react-three/drei";
+import {useFrame} from "@react-three/fiber";
+import {createRef, useRef, useState} from "react";
+import {Box3Helper, BoxHelper, Euler, Vector3, Group, SkeletonHelper} from "three";
+import {degToRad} from "three/src/math/MathUtils";
 
-export default function WorldObject(props: JSX.IntrinsicElements['group'] & {
+export interface GeoAndMaterial {
   geometryName: string,
   materialName: string,
-  worldPosition: Vector3,
-  autoRotate: boolean,
+}
+
+export default function WorldObject(props: {
+  geosAndMaterials: GeoAndMaterial[],
+  position: Vector3,
+  rotation?: Vector3,
+  autoRotate?: boolean,
 }) {
 
   // @ts-ignore
@@ -21,15 +27,31 @@ export default function WorldObject(props: JSX.IntrinsicElements['group'] & {
     }
   });
 
+  const rootRef = createRef<Group>();
+
+  // useHelper(rootRef, BoxHelper);
+
   return (
-      <group {...props} position={props.worldPosition} rotation={new Euler(0, rotation, 0)} dispose={null}>
-        <mesh
-            castShadow={true}
-            receiveShadow={true}
-            geometry={nodes[props.geometryName].geometry}
-            material={materials[props.materialName]}
-            position={[0, 0, 0]}>
-        </mesh>
-      </group>
+      <>
+        <group {...props}
+               ref={rootRef}
+               position={props.position}
+               rotation={props.autoRotate ? new Euler(0, rotation, 0) : props.rotation ? new Euler(degToRad(props.rotation.x), degToRad(props.rotation.y), degToRad(props.rotation.z)) : new Euler(0, 0, 0)}
+               dispose={null}>
+          {
+            props.geosAndMaterials.map(data => {
+              return (
+                  <mesh key={`${data.geometryName}-${data.materialName}`}
+                        castShadow={true}
+                        receiveShadow={true}
+                        geometry={nodes[data.geometryName].geometry}
+                        material={materials[data.materialName]}
+                        position={[0, 0, 0]}>
+                  </mesh>)
+            })
+          }
+        </group>
+        {/*<TransformControls object={rootRef} translationSnap={0.5}/>*/}
+      </>
   );
 }

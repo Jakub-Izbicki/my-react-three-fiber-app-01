@@ -7,7 +7,7 @@ import {Vector2} from "three";
 
 extend({SSAOPass, ShaderPass, RenderPixelatedPass});
 
-// creates a pixelated screen effect
+// creates a pixelated screen effect, with highlighted edges/cavities
 export default function PostProcessingEffects() {
   const {size, camera, scene} = useThree();
   const [zoom, setZoom] = useState(camera.zoom);

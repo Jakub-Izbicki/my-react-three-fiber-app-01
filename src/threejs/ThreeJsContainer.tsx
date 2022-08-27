@@ -34,14 +34,33 @@ export default function ThreeJsContainer() {
           <pointLight position={[0, 1000, 0]} intensity={0.3}/>
           <directionalLight castShadow={true} intensity={0.8} shadow-mapSize={[1024, 1024]} shadow-bias={-0.0001} position={[-10, 10, 5]} />
           {/*<directionalLight position={[-10, 10, 5]}  castShadow={true}/>*/}
-          <OrthographicCamera makeDefault far={100} near={0.1} position={[-10, 10, -10]} zoom={200} />
-          <MapControls screenSpacePanning={true} enableDamping={false}/>
+          <OrthographicCamera makeDefault={true} far={100} near={0.1} position={[-10, 10, -10]} zoom={200} />
+          <MapControls makeDefault={true} screenSpacePanning={true} enableDamping={false}/>
           <PostProcessingEffects/>
 
           {/*{boxes}*/}
           {/*<TileColumn/>*/}
-          <WorldObject geometryName={'column01'} materialName={'grayStone01'} worldPosition={new Vector3(0, 0, 0)} autoRotate={false}/>
-          <WorldObject geometryName={'sphere'} materialName={'sphere01'} worldPosition={new Vector3(-1.2, 1, 0.5)} autoRotate={true}/>
+          <WorldObject geosAndMaterials={[{ geometryName: 'column01', materialName: 'grayStone01'}]} position={new Vector3(0, 0, 0)}/>
+          <WorldObject geosAndMaterials={[{ geometryName: 'sphere', materialName: 'sphere01'}]} position={new Vector3(-1.2, 1, 0.5)} autoRotate={true}/>
+          <WorldObject geosAndMaterials={[{ geometryName: 'stoneWall01_1', materialName: 'grayStone01'}, { geometryName: 'stoneWall01_2', materialName: 'brownStone01'}]} position={new Vector3(-3, 0, 0)}/>
+          <WorldObject geosAndMaterials={[{ geometryName: 'stoneWall01_1', materialName: 'grayStone01'}, { geometryName: 'stoneWall01_2', materialName: 'brownStone01'}]} position={new Vector3(-4, 0, 0)}/>
+          {/*<WorldObject geosAndMaterials={[{ geometryName: 'stoneWall01_1', materialName: 'grayStone01'}, { geometryName: 'stoneWall01_2', materialName: 'brownStone01'}]} position={new Vector3(-5, 0, 0)}/>*/}
+          <WorldObject geosAndMaterials={[{ geometryName: 'stoneWall01_1', materialName: 'grayStone01'}, { geometryName: 'stoneWall01_2', materialName: 'brownStone01'}]} position={new Vector3(-3, 0, -1)}/>
+          <WorldObject geosAndMaterials={[{ geometryName: 'stoneWall01_1', materialName: 'grayStone01'}, { geometryName: 'stoneWall01_2', materialName: 'brownStone01'}]} position={new Vector3(-4, 0, -1)}/>
+          {/*<WorldObject geosAndMaterials={[{ geometryName: 'stoneWall01_1', materialName: 'grayStone01'}, { geometryName: 'stoneWall01_2', materialName: 'brownStone01'}]} position={new Vector3(-5, 0, -1)}/>*/}
+          <WorldObject geosAndMaterials={[{ geometryName: 'stoneWallFlank01', materialName: 'grayStone01'}]} position={new Vector3(-3, 1, 0)}/>
+          <WorldObject geosAndMaterials={[{ geometryName: 'stoneWallFlank01', materialName: 'grayStone01'}]} position={new Vector3(-3, 1, 0)} rotation={new Vector3(0,90, 0)}/>
+          <WorldObject geosAndMaterials={[{ geometryName: 'stoneWallFlank01', materialName: 'grayStone01'}]} position={new Vector3(-4, 1, 0)}/>
+          <WorldObject geosAndMaterials={[{ geometryName: 'stoneWallFlank01', materialName: 'grayStone01'}]} position={new Vector3(-5, 1, 0)}/>
+          <WorldObject geosAndMaterials={[{ geometryName: 'stoneWallFlank01', materialName: 'grayStone01'}]} position={new Vector3(-5, 1, 0)} rotation={new Vector3(0,-90, 0)}/>
+          <WorldObject geosAndMaterials={[{ geometryName: 'stoneWallFlank01', materialName: 'grayStone01'}]} position={new Vector3(-3, 1, -1)} rotation={new Vector3(0,180, 0)}/>
+          <WorldObject geosAndMaterials={[{ geometryName: 'stoneWallFlank01', materialName: 'grayStone01'}]} position={new Vector3(-3, 1, -1)} rotation={new Vector3(0,90, 0)}/>
+          <WorldObject geosAndMaterials={[{ geometryName: 'stoneWallFlank01', materialName: 'grayStone01'}]} position={new Vector3(-4, 1, -1)} rotation={new Vector3(0,180, 0)}/>
+          <WorldObject geosAndMaterials={[{ geometryName: 'stoneWallFlank01', materialName: 'grayStone01'}]} position={new Vector3(-5, 1, -1)} rotation={new Vector3(0,180, 0)}/>
+          <WorldObject geosAndMaterials={[{ geometryName: 'stoneWallFlank01', materialName: 'grayStone01'}]} position={new Vector3(-5, 1, -1)} rotation={new Vector3(0,-90, 0)}/>
+          <WorldObject geosAndMaterials={[{ geometryName: 'stoneWallArch01', materialName: 'grayStone01'}]} position={new Vector3(-5, 0, -1)} rotation={new Vector3(0,180, 0)}/>
+          <WorldObject geosAndMaterials={[{ geometryName: 'stoneWallArch01', materialName: 'grayStone01'}]} position={new Vector3(-5, 0, 0)} rotation={new Vector3(0,0, 0)}/>
+
           {/*{dirtTiles}*/}
           <Ground/>
         </Canvas>
